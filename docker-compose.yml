@@ -1,15 +1,17 @@
-version: "2.4"
+version: "3.8"
 
 services:
     app-web:
-        image: ${PROJECT_NAME}/go-delve:${DOCKER_BUILD_TAG_VERSION}
+        image: ${PROJECT_NAME}/go-delve:${DOCKER_BUILD_VERSION}
         build: ./docker/delve
         ports: 
-            - 8080:80
-            - 2345:2345
+            - "8080:80"
+            - "2345:2345"
         volumes: 
             - ${APP_API_REL_DIR}:/go/src/${APP_API_DIR}
         working_dir: /go/src/${APP_API_DIR}
+        environment:
+            - RUN_SAFE=${RUN_SAFE}
         security_opt:
             - apparmor:unconfined
         cap_add:

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/google/safehtml/template"
+	"os"
 
 	"github.com/google/go-safeweb/safehttp"
 	"github.com/google/go-safeweb/safehttp/plugins/csp"
 	"github.com/google/go-safeweb/safehttp/plugins/htmlinject"
 	"github.com/google/go-safeweb/safesql"
+	"github.com/google/safehtml/template"
 
-	"github.com/hyorimitsu/go-safeweb-sample/app-web/interceptor"
+	"github.com/hyorimitsu/hello-go-safeweb/app-web/interceptor"
 )
 
 func main() {
@@ -21,10 +21,10 @@ func main() {
 }
 
 func safeHttp() {
-	isSafe := true
+	isSafe := os.Getenv("RUN_SAFE")
 
 	// DOM XSS があるページの例
-	if isSafe {
+	if isSafe == "true" {
 		// safehttp を利用した場合
 		mc := safehttp.NewServeMuxConfig(nil)
 		mc.Intercept(csp.Default(""), interceptor.Default1(), interceptor.Default2(), interceptor.Default3())
@@ -65,7 +65,7 @@ func safeSql() {
 	trustedSqlStr1 := safesql.New("SELECT * FROM users WHERE id = ?")
 	db.Query(trustedSqlStr1, "A01")
 
-	// NGパターン
+	// NGパターン（コンパイルエラー）
 	//userID := "A01"
 	//trustedSqlStr2 := safesql.New("SELECT * FROM users WHERE id = " + userID)
 	//db.Query(trustedSqlStr2)

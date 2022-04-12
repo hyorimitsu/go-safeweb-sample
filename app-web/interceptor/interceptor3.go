@@ -2,6 +2,7 @@ package interceptor
 
 import (
 	"fmt"
+
 	"github.com/google/go-safeweb/safehttp"
 )
 
